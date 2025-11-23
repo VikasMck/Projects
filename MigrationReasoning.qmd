@@ -1,0 +1,935 @@
+---
+title: "Migration for Wealth or Education"
+author: "Vikas Mackevicius"
+format:
+  html:
+    self-contained: true
+    theme: simplex
+    code-fold: true
+    code-tools: true
+    dashboard: true
+editor: visual
+---
+
+::: {.panel-fill layout="[ [1] ]" style="max-width: 1000px; margin: auto;"}
+
+::: panel-tabset
+
+## Introduction
+
+# Introduction
+
+Migration is something that many people have to resort to for a better life. It is a big part of out generation as it shapes our world and the world around us - shaping the way people live, learn, and build their future. Many move in search of better education or new job opportunities, hoping to improve their quality of life. This assignment showcases how migration connects to education and wealth. I will be visualising the data and creating interactive chart to allow people to learn and understand why migration happens, and which regions of the world see the most of it. To achieve the following, these are the datasets I have used:
+
+- **Global IQ Data**
+
+  https://www.kaggle.com/datasets/mlippo/average-global-iq-per-country-with-other-stats
+
+  This is a dataset containing information about average IQ per country. Using this I am able to see any correlations between IQ and Nobel Prizes, and if IQ is effected by education investments,
+
+- **World Happiness Data**
+
+  https://www.kaggle.com/datasets/simonaasm/world-happiness-index-by-reports-2013-2023
+
+  This is a dataset which has data about countries happiness. Unfortunately this dataset does not have enough countries listed to be fully representative of each country, but it is still a useful dataset to use for continental happiness.
+
+- **Country Population Data**
+
+  https://www.kaggle.com/datasets/tanuprabhu/population-by-country-2020
+
+  This is a dataset which has data about countries population. I was not able to find a dataset for 2022, so I used 2020. With manual checking the numbers have not change too significantly between 2020 and 2022, and trends stayed the same which what matters the most.
+
+- **Country Financial Data**
+
+  https://www.kaggle.com/datasets/yusufglcan/country-data
+
+  Main dataset for containing all information about countries financial positions, and where they spend the money. The issue with the dataset is not all countries had information about where they spend money.
+
+- **Extra**
+
+  I also use a world_map dataset for the sake of printing the global map in the next panel, but that is not the focus of this big idea.
+
+Using these datasets, I will be able to show how migration is connected to wealth and education. I will be able to showcase how important is to invest towards education, and what results it yields. I will also be investigating what effects unemployment and GDP Per Capita have on migration.
+
+## The Big Idea
+
+# The Big Idea
+
+
+::: panel
+
+## Datasets [Migration for Wealth or Education]:
+
+>- https://www.kaggle.com/datasets/mlippo/average-global-iq-per-country-with-other-stats
+>- https://www.kaggle.com/datasets/simonaasm/world-happiness-index-by-reports-2013-2023
+>- https://www.kaggle.com/datasets/tanuprabhu/population-by-country-2020
+>- https://www.kaggle.com/datasets/yusufglcan/country-data
+
+### Audience:
+
+:::: {.columns}
+
+::: {.column width="45%"}
+**(1)	Primary groups or individuals:**
+
+- People interested in info about countries' migration patterns and population changes.
+- Analysts understanding the key factors for countries growth.
+- Students and teachers studying global population movements.
+- Journalists needing accurate migration data for reporting.
+- People who are looking for potential countries to migrate to.
+
+**(2)	Single person:**
+
+- CEO trying to cut costs by removing investments without understanding full range of consequences.
+
+:::
+
+::: {.column width="10%"}
+:::
+
+::: {.column width="45%"}
+
+**(3)	Audience’s Interests:**
+
+- Understanding information about individual countries.
+- Learning about the changing world, and which countries are leading the scene.
+- Understanding which metrics are important for a country to survive, which can be used for voting for political parties which protect such policies.
+
+**(4)	Audience’s Actions:**
+
+- Learn about own country, and try to influence any positive change.
+- Be grateful if living in an advanced country, as not everyone can say the same.
+
+:::
+
+::::
+
+### Stakes:
+
+:::: {.columns}
+
+::: {.column width="45%"}
+
+**Benefits:**
+
+- Better appreciation for education departments, and government investments towards them.
+- Better understanding of global migration patterns.
+
+:::
+
+::: {.column width="10%"}
+:::
+
+
+::: {.column width="45%"}
+
+**Risks:**
+
+- Falling behind on world trends.
+
+:::
+::::
+
+>## Understanding the economic world is essential for overall intelligence, especially considering ongoing migration trends and cultural shifts.
+
+:::
+
+## Dataset Creation
+
+# Dataset Creation
+
+### Important Setup Information
+Original datasets have been renamed to:
+
+- VI_PopulationByCountry2020.csv
+- VI_WorldHappinessIndex.csv
+- VI_CountriesFinancialData.csv
+- VI_AvgIqPerCountry.csv
+
+Final dataset is created, but also submitted as:
+
+- VI_FullDataset.csv
+
+Files need to be in the same directory as qmd, and then this command must be ran:
+
+```{r fig.width=10, fig.height=10, message=FALSE, warning=FALSE}
+#setwd("Your/File/Directory")
+```
+
+
+### Installing and loading needed libraries
+::: panel
+```{r fig.width=10, fig.height=10, message=FALSE, warning=FALSE}
+if (!require("ggplot2")) install.packages("ggplot2", dependencies = TRUE)
+if (!require("dplyr")) install.packages("dplyr", dependencies = TRUE)
+if (!require("tidyr")) install.packages("tidyr", dependencies = TRUE)
+if (!require("plotly")) install.packages("plotly", dependencies = TRUE)
+if (!require("forcats")) install.packages("forcats", dependencies = TRUE)
+if (!require("ggiraph")) install.packages("ggiraph", dependencies = TRUE)
+if (!require("maps")) install.packages("maps", dependencies = TRUE)
+if (!require("simputation")) install.packages("simputation", dependencies = TRUE)
+if (!require("tmap")) install.packages("tmap", dependencies = TRUE)
+if (!require("sf")) install.packages("sf", dependencies = TRUE)
+if (!require("rnaturalearth")) install.packages("rnaturalearth", dependencies = TRUE)
+if (!require("rnaturalearthdata")) install.packages("rnaturalearthdata", dependencies = TRUE)
+if (!require("scales")) install.packages("scales", dependencies = TRUE)
+if (!require("gganimate")) install.packages("gganimate", dependencies = TRUE)
+if (!require("cowplot")) install.packages("cowplot", dependencies = TRUE)
+if (!require("reshape2")) install.packages("reshape2", dependencies = TRUE)
+
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(plotly)
+library(forcats)
+library(ggiraph)
+library(maps)
+library(simputation)
+library(tmap)
+library(sf)
+library(rnaturalearth)
+library(rnaturalearthdata)
+library(scales)
+library(gganimate)
+library(cowplot)
+library(reshape2)
+```
+
+### Original Datasets
+```{r fig.width=10, fig.height=10, message=FALSE, warning=FALSE}
+# The original csv files from kaggle
+population_by_country <- read.table("VI_PopulationByCountry2020.csv", header = TRUE, sep = ",", quote = "", encoding = "UTF-8", fill = TRUE)
+
+world_happiness_index <- read.table("VI_WorldHappinessIndex.csv", header = TRUE, sep = ",", quote = "", encoding = "UTF-8", fill = TRUE)
+
+countries_financial_data <- read.table("VI_CountriesFinancialData.csv", header = TRUE, sep = ",", quote = "", encoding = "UTF-8", fill = TRUE)
+
+average_iq_per_country<- read.table("VI_AvgIqPerCountry.csv", header = TRUE, sep = ",", quote = "", encoding = "UTF-8", fill = TRUE)
+```
+- Due to smaller data requirements, the analysys will be done for year 2022 only.
+
+## Data Cleaning
+
+### Population Dataset
+```{r fig.width=10, fig.height=10, message=FALSE, warning=FALSE}
+colnames(population_by_country) <- c("Country", "Population", "Population Yearly Change", "Population Net Change", "Population Density", "Land Area", "Net Migrants", "Fertility Rate", "Median Age", "Urban Population", "World Share")
+```
+- Renaming columns.
+
+### Happiness Dataset
+```{r fig.width=10, fig.height=10, message=FALSE, warning=FALSE}
+world_happiness_index <- world_happiness_index[world_happiness_index$Year == 2022, ]
+
+row.names(world_happiness_index) <- NULL
+
+world_happiness_index <- world_happiness_index[, !names(world_happiness_index) %in% "Year"]
+
+colnames(world_happiness_index) <- c("Country", "Happiness Index", "Happiness Rank")
+```
+- Only keeping 2022 data.
+- Removing the column: Year.
+- Resetting IDs.
+- Renaming columns,
+
+
+### Average IQ Dataset
+```{r fig.width=10, fig.height=10, message=FALSE, warning=FALSE}
+average_iq_per_country <- average_iq_per_country[, !names(average_iq_per_country) %in% "Population...2023"]
+
+colnames(average_iq_per_country) <- c("IQ Rank", "Country", "Average IQ", "Continent", "Literacy Rate", "Nobel Prizes", "HDI", "Mean Schooling Years", "GNI")
+
+average_iq_per_country <- average_iq_per_country[, !names(average_iq_per_country) %in% "GNI"]
+```
+- Removing unneeded columns.
+- Renaming columns.
+
+### Country Finance Dataset
+```{r fig.width=10, fig.height=10, message=FALSE, warning=FALSE}
+countries_financial_data <- countries_financial_data[countries_financial_data$Year == 2022, ]
+
+row.names(countries_financial_data) <- NULL
+
+countries_financial_data <- countries_financial_data[, !names(countries_financial_data) %in% "Country.Code"]
+countries_financial_data <- countries_financial_data[, !names(countries_financial_data) %in% "Year"]
+countries_financial_data <- countries_financial_data[, !names(countries_financial_data) %in% "Population"]
+countries_financial_data <- countries_financial_data[, !names(countries_financial_data) %in% "Population.Density"]
+countries_financial_data <- countries_financial_data[, !names(countries_financial_data) %in% "R.D"]
+countries_financial_data <- countries_financial_data[, !names(countries_financial_data) %in% "Service....GDP."]
+countries_financial_data <- countries_financial_data[, !names(countries_financial_data) %in% "Continent.Name"]
+countries_financial_data <- countries_financial_data[, !names(countries_financial_data) %in% "Country.Code"]
+countries_financial_data <- countries_financial_data[, !names(countries_financial_data) %in% "Land"]
+countries_financial_data <- countries_financial_data[, !names(countries_financial_data) %in% "Import....GDP."]
+countries_financial_data <- countries_financial_data[, !names(countries_financial_data) %in% "Industry....GDP."]
+countries_financial_data <- countries_financial_data[, !names(countries_financial_data) %in% "Export....GDP."]
+countries_financial_data <- countries_financial_data[, !names(countries_financial_data) %in% "Agriculture....GDP."]
+countries_financial_data <- countries_financial_data[, !names(countries_financial_data) %in% "Education.Expenditure"]
+countries_financial_data <- countries_financial_data[, !names(countries_financial_data) %in% "Health.Expenditure"]
+
+colnames(countries_financial_data) <- c("Country", "Ease Of Doing Business", "Education Expenditure", "Country GDP", "Health Expenditure", "Inflation Rate", "Unemployment", "Country Export", "Country Import", "Country Net Trade", "GDP Per Capita")
+```
+- Removing duplicate columns.
+- Renaming columns.
+
+
+## Merging Data
+
+```{r fig.width=10, fig.height=10, message=FALSE, warning=FALSE}
+global_information_dataset <- population_by_country %>%
+  left_join(world_happiness_index, by = "Country") %>%
+  left_join(average_iq_per_country, by = "Country") %>%
+  left_join(countries_financial_data, by = "Country")
+
+
+global_information_dataset <- global_information_dataset %>%
+  mutate(across(where(is.character), ~ na_if(., "NULL"))) %>%
+  mutate(across(where(is.character), ~ na_if(., "N.A.")))
+
+global_information_dataset <- global_information_dataset %>%
+  filter(!is.na(`Median Age`))
+```
+
+## Cleaning Merged Dataset
+
+### Adding Missing Data
+```{r fig.width=10, fig.height=10, message=FALSE, warning=FALSE}
+global_information_dataset <- global_information_dataset %>%
+  mutate(Continent = case_when(
+    Country == "DR Congo" ~ "Africa",
+    Country == "Turkey" ~ "Europe/Asia",
+    Country == "Côte d'Ivoire" ~ "Africa",
+    Country == "Czech Republic (Czechia)" ~ "Europe",
+    Country == "State of Palestine" ~ "Asia",
+    Country == "Moldova" ~ "Europe",
+    Country == "Guinea-Bissau" ~ "Africa",
+    Country == "Equatorial Guinea" ~ "Africa",
+    Country == "Timor-Leste" ~ "Asia",
+    Country == "Réunion" ~ "Africa",
+    Country == "Western Sahara" ~ "Africa",
+    Country == "Cabo Verde" ~ "Africa",
+    Country == "Guadeloupe" ~ "North America",
+    Country == "Martinique" ~ "North America",
+    Country == "French Guiana" ~ "South America",
+    Country == "French Polynesia" ~ "Oceania",
+    Country == "Mayotte" ~ "Africa",
+    Country == "Sao Tome & Principe" ~ "Africa",
+    Country == "Samoa" ~ "Oceania",
+    Country == "Channel Islands" ~ "Europe",
+    Country == "Guam" ~ "Oceania",
+    Country == "Curaçao" ~ "North America",
+    Country == "Kiribati" ~ "Oceania",
+    Country == "Micronesia" ~ "Oceania",
+    Country == "Grenada" ~ "North America",
+    Country == "St. Vincent & Grenadines" ~ "North America",
+    Country == "Aruba" ~ "North America",
+    Country == "Tonga" ~ "Oceania",
+    Country == "U.S. Virgin Islands" ~ "North America",
+    TRUE ~ Continent
+  ))
+```
+
+### Imputing Values
+
+```{r fig.width=10, fig.height=10, message=FALSE, warning=FALSE}
+global_information_dataset <- impute_median(global_information_dataset, `Inflation Rate` ~ Continent)
+global_information_dataset <- impute_median(global_information_dataset, `HDI` ~ Continent)
+global_information_dataset <- impute_median(global_information_dataset, `Unemployment` ~ Continent)
+global_information_dataset <- impute_median(global_information_dataset, `GDP Per Capita` ~ Continent)
+```
+- With the help of Continent statistics, I am taking the median value, and imputing it for the NA fields.
+
+
+### NA to 0
+
+```{r fig.width=10, fig.height=10, message=FALSE, warning=FALSE}
+global_information_dataset$`Nobel Prizes`[is.na(global_information_dataset$`Nobel Prizes`)] <- 0
+```
+- If Nobel Prizes are NA, it is safe to assume they are 0
+
+
+### Turn to Numeric
+
+
+```{r fig.width=10, fig.height=10, message=FALSE, warning=FALSE}
+global_information_dataset <- global_information_dataset %>%
+  mutate(`Happiness Index` = as.numeric(`Happiness Index`))
+
+global_information_dataset <- global_information_dataset %>%
+  mutate(`Happiness Rank` = as.numeric(`Happiness Rank`))
+```
+
+:::
+
+## Countries
+
+# Country Analysis
+
+::: panel
+
+The goal of this section is to look at the data from each country, and allow people to view key metrics such as GDP and population. This can be a way to learn which countries are rich or struggling, and which countries have a lot of people. I will also be analysing the top countries which are losing people and gaining people, and which continents are the happiest.
+
+## World Map
+```{r fig.width=10, fig.height=10, message=FALSE, warning=FALSE}
+#have to create a smaller dataset and change GDP to match world_map_data
+countries_population_gdp <- global_information_dataset[c("Country", "Population", "Country GDP")]
+colnames(countries_population_gdp) <- c("Country", "Population", "GDP")
+
+#import world_map_data from libraries
+if (!exists("world_map_data")) {
+  world_map_data <- ne_countries(scale = "medium", returnclass = "sf")
+}
+
+#edit them to match my dataset
+world_map_data <- world_map_data %>%
+  mutate(admin = case_when(
+    admin == "eSwatini" ~ "Eswatini",
+    admin == "United States of America" ~ "United States",
+    admin == "Greenland" ~ "Greenland",
+    admin == "Ivory Coast" ~ "Côte d'Ivoire",
+    admin == "Republic of the Congo" ~ "Congo",
+    admin == "Democratic Republic of the Congo" ~ "DR Congo",
+    admin == "United Republic of Tanzania" ~ "Tanzania",
+    admin == "Somaliland" ~ "Somalia",
+    admin == "Republic of Serbia" ~ "Serbia",
+    admin == "Czechia" ~ "Czech Republic (Czechia)",
+    TRUE ~ admin
+  ))
+
+#sf library
+world_sf <- st_as_sf(world_map_data)
+#admin best fits my dataset Countries
+world_sf <- world_sf %>%
+  left_join(countries_population_gdp, by = c("admin" = "Country"))
+
+tmap_mode("view")
+
+tm_shape(world_sf) +
+  tm_polygons(col = "admin",
+              id = "admin",
+              popup.vars = c("Population", "GDP"),
+              palette = "Set3",
+              legend.show = FALSE) +
+  tm_layout(legend.show = FALSE)
+
+```
+**Reasoning**
+
+This is the easiest way to understand information about countries. User can see where the country is located, it's population and GDP.
+
+
+## Population and GDP with HDI
+
+```{r fig.width=10, fig.height=10, message=FALSE, warning=FALSE}
+interactive_scatter_plot <- ggplot(global_information_dataset, aes(
+  x = Population, y = `Country GDP`, 
+  text = paste("Country:", Country,
+               "\nPopulation:", comma(Population),
+               "\nCountry GDP:", comma(`Country GDP`),
+               "\nHDI:", round(HDI, 3)))) +
+  geom_point(aes(color = HDI), alpha = 0.8) +
+  geom_smooth(method = "lm", se = FALSE, color = "white", linetype = "dashed") +
+  scale_x_log10(labels = label_number(scale_cut = cut_short_scale())) +
+  scale_y_log10(labels = label_number(scale_cut = cut_short_scale())) +
+  scale_color_viridis_c(option = "cividis", name = "HDI") +  
+  theme_minimal(base_size = 14) +
+  theme(panel.background = element_rect(fill = "white"),
+        plot.background = element_rect(fill = "white"),
+        text = element_text(color = "black"),
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        axis.text.y = element_text(vjust = 1),  
+        legend.position = "bottom") +
+  labs(title = "GDP vs Population", 
+       x = "Population", 
+       y = "GDP")
+
+ggplotly(interactive_scatter_plot, tooltip = "text")
+```
+HDI
+: Human Development Index
+
+GDP
+: Gross Domestic Product
+
+**Obeservations**
+
+With the help of this interactive scatterplot, it is clear which countries have most population, and GDP.
+
+- A clear trend is visible that more people usually mean higher GDP.
+- HDI is also correlated to GDP, as countries with higher GDP, tend to have a better Human Development Index.
+
+## Top Population Gain/Loss Countries
+```{r fig.width=5, fig.height=10, message=FALSE, warning=FALSE}
+country_population_change <- global_information_dataset %>% 
+  select(Country, Population, `Population Net Change`, `Net Migrants`, Continent)
+
+create_population_plot <- function(data, title, y_title, colour1, colour2) {
+  data <- data %>%
+    mutate(Country = fct_reorder(Country, `Population Net Change`)) %>%
+    arrange(`Population Net Change`)
+  
+  data_long <- data %>%
+    pivot_longer(cols = c(`Population Net Change`, `Net Migrants`), names_to = "Metric", values_to = "Value") %>%
+    mutate(tooltip_text = paste0(Metric, ": ", comma(Value)))
+  
+  temp_plot <- ggplot(data_long, aes(x = Country, y = Value, fill = Metric, text = tooltip_text)) +
+    geom_bar(stat = "identity", position = position_dodge(width = 0.6)) +
+    scale_y_continuous(labels = label_number(scale_cut = cut_short_scale()), 
+                       breaks = pretty_breaks(n = 5)) +
+    scale_fill_manual(values = c("Population Net Change" = colour1, "Net Migrants" = colour2)) +
+    labs(title = title, x = "Country", y = y_title, fill = "Metric") +
+    theme_minimal() +
+    coord_flip()
+  
+  ggplotly(temp_plot, tooltip = "text")
+}
+
+
+top_population_loss <- country_population_change %>% arrange(`Population Net Change`) %>% slice_head(n = 20)
+top_population_gain <- country_population_change %>% arrange(desc(`Population Net Change`)) %>% slice_head(n = 20)
+
+loss_plotly <- create_population_plot(top_population_loss, "Countries with Biggest Population Loss", "Population Loss / Net Migrants","red", "lightblue" )
+gain_plotly <- create_population_plot(top_population_gain, "Countries with Biggest Population Gain", "Population Gain / Net Migrants","lightgreen", "orange")
+```
+
+
+```{r fig.width=5, fig.height=6, message=FALSE, warning=FALSE}
+loss_plotly
+```
+**Obeservations**
+Here we can visualise which countries are having the biggest population losses, and how many people are migrating
+
+- By a lot, Japan is losing the most population, even when a lot of people are migrating to it.
+- Venezuala, is losing a record high people due to migration, but due to high fertility rate, most of that is combatted.
+
+```{r fig.width=5, fig.height=6, message=FALSE, warning=FALSE}
+gain_plotly
+```
+**Obeservations**
+
+Here we can visualise which countries are having the biggest population gains, and how many people are migrating
+
+- India is gaining more than double the population of second place (China), even when losing half a million people to migration.
+- Bangladesh has more migrations than China, even though its 11th on the list regarding the population gain.
+
+
+### Happiness by Continents
+```{r fig.width=10, fig.height=10, message=FALSE, warning=FALSE}
+continent_happiness <- global_information_dataset %>% 
+  select(Continent, `Happiness Index`, `Happiness Rank`)
+
+avg_continent_happiness <- continent_happiness %>%
+  group_by(Continent) %>%
+  summarise(Avg_Happiness = mean(`Happiness Index`, na.rm = TRUE))
+
+interactive_avg_continent_happiness <- ggplot(avg_continent_happiness, aes(x = Continent, y = Avg_Happiness, color = Continent, text = paste("Happiness Index:", round(Avg_Happiness, 2)))) +
+  geom_segment(aes(xend = Continent, y = 0, yend = Avg_Happiness), linewidth = 1.5) +
+  geom_point(size = 4) +
+  labs(title = "Happiness by Continent",
+       x = "Continent",
+       y = "Happiness Index") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
+
+ggplotly(interactive_avg_continent_happiness, tooltip = "text") %>%
+  layout(legend = list(title = list(text = "Continent")))  
+
+```
+
+**Observations**
+
+- Africa is the least happy, with other less advanced areas such as East Europe/West Asia, and South America.
+- Oceania is the happiest.
+:::
+
+## Wealth
+
+# Migration for Financial Reason
+
+
+::: panel
+
+### Does unemployment have any correlation with inflation, or GDP Per Capita? Does it effect migration?
+
+**Correlations**
+```{r fig.width=10, fig.height=10, message=FALSE, warning=FALSE}
+inflation_unemployment_gdppc <- global_information_dataset %>% 
+  select(`Inflation Rate`, Unemployment, `GDP Per Capita`, `Net Migrants`)
+
+cor_test_result <- cor.test(
+  inflation_unemployment_gdppc$`Inflation Rate`,
+  inflation_unemployment_gdppc$Unemployment,
+  use = "complete.obs"
+)
+
+cat("Correlation between Inflation and Unemployment:",
+    "\n  Coefficient:", round(cor_test_result$estimate, 3),
+    "\n  p-value:", format.pval(cor_test_result$p.value, eps = 0.001), "\n")
+```
+The correlation is positive between inflation and unemployment, but is weak. Even though it is weak, the p-value shows that it is still significant, and not random.
+
+```{r fig.width=10, fig.height=10, message=FALSE, warning=FALSE}
+cor_test_gdp <- cor.test(  
+  inflation_unemployment_gdppc$Unemployment,  
+  inflation_unemployment_gdppc$`GDP Per Capita`, 
+  use = "complete.obs"  
+)  
+cat("Correlation between Unemployment and GDP per capita:",  
+    "\n  Coefficient:", round(cor_test_gdp$estimate, 3),  
+    "\n  p-value:", format.pval(cor_test_gdp$p.value, eps = 0.001), "\n") 
+```
+The correlation is negative between unemployment and inflation, but fairly weak. This means that when unemploment decreaseses, GDP per capita tends to increase. The p-value of is highly significant as its far bellow the threshold, making it almost certain it is not random.
+
+### Effects of Unemployment
+```{r fig.width=15, fig.height=8, message=FALSE, warning=FALSE}
+inflation_unemployment <- ggplot(global_information_dataset, aes(x = Unemployment, y = `Inflation Rate`)) +
+  geom_point(alpha = 0.6, color = "black", size = 1) + 
+  geom_smooth(method = "lm", color = "red", fill = "pink") +
+  labs(title = "Inflation / Unemployment",
+       subtitle = "Weak positive correlation",
+       x = "Unemployment Rate",
+       y = "Inflation Rate") +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(face = "bold", size = 15),
+    plot.subtitle = element_text(color = "grey", size = 13),
+    axis.title = element_text(size = 12),
+    panel.grid.minor = element_blank()
+  ) +
+  scale_y_continuous(labels = scales::percent_format(scale = 1)) +
+  scale_x_continuous(labels = scales::percent_format(scale = 1))
+
+gdppc_unemployment <- ggplot(global_information_dataset, aes(x = Unemployment, y = `GDP Per Capita`)) +
+  geom_point(alpha = 0.6, color = "black", size = 1) + 
+  geom_smooth(method = "lm", color = "steelblue", fill = "lightblue") +
+  labs(title = "GDP per Capita / Unemployment",
+       subtitle = "Moderate negative correlation",
+       x = "Unemployment Rate",
+       y = "GDP per Capita") +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(face = "bold", size = 15),
+    plot.subtitle = element_text(color = "grey", size = 13),
+    axis.title = element_text(size = 12),
+    panel.grid.minor = element_blank()
+  ) +
+  scale_x_continuous(labels = scales::percent_format(scale = 1)) +
+  scale_y_continuous(labels = scales::dollar_format())
+
+gdpcc_infl_unempl <- plot_grid(inflation_unemployment, gdppc_unemployment, ncol = 2)
+
+gdpcc_infl_unempl
+```
+**Obeservations**
+
+- The graph on the left showcases the positive correlation, as the line is going up, however it isn't spread, therefore it is pretty minimal.
+- The graph on the right showcases the negative correlation, meaning as unemployments goes down, the GDP Per Capita climbs up. The spread is slighty larger, which shows it is a moderate strength,
+
+### Heatmap
+```{r fig.width=10, fig.height=10, message=FALSE, warning=FALSE}
+gdppc_matrix <- cor(inflation_unemployment_gdppc, use = "complete.obs")
+
+melted_gdppc_matrix <- melt(gdppc_matrix)
+
+ggplot(data = melted_gdppc_matrix, aes(x = Var1, y = Var2, fill = value)) +
+  geom_tile() +
+  scale_fill_gradient2(low = "red", high = "orange", mid = "lightyellow", 
+                       midpoint = 0, limit = c(-1,1), space = "Lab", 
+                       name="Correlation") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
+  coord_fixed() +
+  geom_text(aes(label = round(value, 3)), color = "black", size = 4) +
+  labs(title = "Correlation Heatmap",
+       x = "", y = "")
+```
+
+**Observations**
+
+- As shown before, Unemployment helps GDP Per Capita.
+- The main thing to note, migration is also possitively effected by GDP Per Capita, more than Unemployment.
+
+### Migration for Wealth
+
+```{r fig.width=10, fig.height=10, message=FALSE, warning=FALSE}
+inflation_unemployment_gdppc_migrant <- inflation_unemployment_gdppc %>%
+  mutate(GDP_Bin = cut(`GDP Per Capita`, breaks = 10, labels = FALSE)) %>%
+  mutate(bin_min = min(`GDP Per Capita`) + (max(`GDP Per Capita`) - min(`GDP Per Capita`)) * (GDP_Bin - 1) / 10, 
+         bin_max = min(`GDP Per Capita`) + (max(`GDP Per Capita`) - min(`GDP Per Capita`)) * GDP_Bin / 10,
+    GDP_Bin = paste0(format(round(bin_min), big.mark = ","), " - ", format(round(bin_max), big.mark = ","))) %>%
+  group_by(GDP_Bin) %>%
+  summarise(`Total Net Migrants` = sum(`Net Migrants`, na.rm = TRUE)) %>%
+  ungroup() %>%
+  filter(!(GDP_Bin %in% tail(unique(GDP_Bin), 2))) %>%
+  mutate(GDP_Bin = factor(GDP_Bin, levels = unique(GDP_Bin)))
+
+gdppc_migrant_bar <- ggplot(inflation_unemployment_gdppc_migrant, 
+  aes(x = 1, y = GDP_Bin, size = abs(`Total Net Migrants`), 
+  text = paste("GDP Range:", GDP_Bin, "Net Migrants:", scales::comma(`Total Net Migrants`)))) +
+  geom_point(aes(color = ifelse(`Total Net Migrants` > 0, "Coming", "Leaving"))) +
+  scale_color_manual(values = c("Coming" = "darkgreen", "Leaving" = "pink"),
+                     name = "Migration Direction") +
+  scale_size_continuous(range = c(2, 20), "") +
+  labs(title = "Net Migrants by GDP Per Capita",
+       y = "GDP Per Capita") +
+  theme_minimal(base_size = 12) +
+  theme(axis.title.x = element_blank(),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.text.y = element_text(size = 11))
+
+
+ggplotly(gdppc_migrant_bar, tooltip = "text")
+```
+
+**Observations**
+
+- This showcases how people are migrating around the world for the sake of financial security. Countries which have under 12857 GDP Per Capita have a lot of people migrating.
+- The main GDP Per Capita that people thrive for is for ~50k and for ~85k. This could be explained by people migrating to richer neighbouring countries. 
+:::
+
+## Education
+
+# Migration for Education Reasons
+
+
+::: panel
+
+### Does more schooling years, average iq and education expenditure contribute to countries intelect? Is it a reason for migration?
+
+**Correlations**
+```{r fig.width=10, fig.height=10, message=FALSE, warning=FALSE}
+smart_data <- global_information_dataset %>% 
+  select(`Mean Schooling Years`, `Nobel Prizes`, `Literacy Rate`, `Average IQ`, `Education Expenditure`, `Net Migrants`)
+
+
+cor_test_msy_lit <- cor.test(
+  smart_data$`Mean Schooling Years`,
+  smart_data$`Literacy Rate`,
+  use = "complete.obs"
+)
+cat("Correlation between Mean Schooling Years and Literacy Rate:",
+    "\n  Coefficient:", round(cor_test_msy_lit$estimate, 3),
+    "\n  p-value:", format.pval(cor_test_msy_lit$p.value, eps = 0.001), "\n\n")
+```
+- Strong positive correlation between Mean Schooling Years and Literacy Rate. This shows that countries with higher average years of schooling have higher literacy rates.
+- The relationship is highly statistically significant due to low p-value meaning this association is very  likely to show a correct pattern in the data.
+
+
+```{r fig.width=10, fig.height=10, message=FALSE, warning=FALSE}
+cor_test_iq_nobel <- cor.test(
+  smart_data$`Average IQ`,
+  smart_data$`Nobel Prizes`,
+  use = "complete.obs"
+)
+cat("Correlation between Average IQ and Nobel Prizes:",
+    "\n  Coefficient:", round(cor_test_iq_nobel$estimate, 3),
+    "\n  p-value:", format.pval(cor_test_iq_nobel$p.value, eps = 0.001), "\n\n")
+
+```
+- A positive correlation between Average IQ and Nobel Prizes, which tells us that countries with higher average IQ scores to have more Nobel Prize winners. The correlation is weak.
+- The relationship is statistically significant (due to low p-value meaning this association is very  likely to show a correct pattern in the data.
+
+
+```{r fig.width=10, fig.height=10, message=FALSE, warning=FALSE}
+cor_test_ee_nobel <- cor.test(
+  smart_data$`Education Expenditure`,
+  smart_data$`Nobel Prizes`,
+  use = "complete.obs"
+)
+cat("Correlation between Education Expenditure and Nobel Prizes:",
+    "\n  Coefficient:", round(cor_test_ee_nobel$estimate, 3),
+    "\n  p-value:", format.pval(cor_test_ee_nobel$p.value, eps = 0.001), "\n")
+```
+- Very weak negative correlation, and high p-value which shows that it is inconsistent. Can be skipped.
+
+## Longer Education, More Literate?
+```{r fig.width=10, fig.height=10, message=FALSE, warning=FALSE}
+lit_rate_school_year <- ggplot(smart_data, aes(x = `Mean Schooling Years`, y = `Literacy Rate`)) +
+  geom_point(color = "darkgreen", alpha = 0.6, size = 2) +
+  geom_smooth(method = "lm", formula = y ~ x, 
+              color = "black", se = FALSE, linewidth = 1.2) +
+  labs(title = paste("Mean Schooling Years / Literacy Rate"),
+       x = "Mean Schooling Years", 
+       y = "Literacy Rate") +
+  theme_minimal(base_size = 14) +
+  scale_y_continuous(labels = scales::percent_format(scale = 100))
+
+          
+ggplotly(lit_rate_school_year, tooltip = c("x", "y")) %>%
+  layout(hoverlabel = list(bgcolor = "lightgreen",
+  font = list(size = 14)),
+  margin = list(t = 60)) %>%
+  config(displayModeBar = TRUE)
+```
+**Observations**
+
+The trend is quite obvious. The more schooling people get, the more literate people there are. However, not everywhere many years are needed to achieve top of the charts.
+
+
+### IQ and Nobel Prizes
+
+```{r fig.width=10, fig.height=10, message=FALSE, warning=FALSE}
+smart_data_range <- smart_data %>%
+  mutate(iq_range = cut(`Average IQ`, breaks = 10))
+
+nobel_summary <- smart_data_range %>%
+  group_by(iq_range) %>%
+  summarize(Total_Nobel_Prizes = sum(`Nobel Prizes`))
+
+nobel_plot <- ggplot(smart_data_range, aes(x = iq_range, y = `Nobel Prizes`, fill = iq_range)) +
+  geom_bar(stat = "sum", alpha = 0.9) +
+  scale_fill_viridis_d(option = "cividis") +
+  labs(title = "Nobel Prizes by IQ Range",
+       x = "Average IQ Range",
+       y = "Total Nobel Prizes") +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "none",
+    panel.grid.major.x = element_blank()
+  )
+
+interactive_nobel_plot <- ggplotly(nobel_plot, tooltip = c("x", "y")) %>%
+  layout(hoverlabel = list(bgcolor = "white", font = list(size = 12))) %>%
+  config(displayModeBar = TRUE)
+
+interactive_nobel_plot
+```
+
+**Observations**
+
+As expected, high IQ is important for Nobel prizes. However, it is not always the top that gets them. Some lower brackets also are able win some Nobel Prizes.
+
+### Education Expenditure
+
+```{r fig.width=10, fig.height=10, message=FALSE, warning=FALSE}
+smart_data_binned <- smart_data %>%
+  mutate(Expenditure_Category = cut(`Education Expenditure`, 
+  breaks = quantile(`Education Expenditure`, probs = seq(0, 1, by = 0.25), na.rm = TRUE),
+  labels = c("Low", "Medium", "High", "Very High"),
+  include.lowest = TRUE))
+
+mean_data <- smart_data_binned %>%
+  group_by(Expenditure_Category) %>%
+  summarize(Mean_Literacy = mean(`Literacy Rate`, na.rm = TRUE),.groups = "drop") %>%
+  mutate(Tooltip_Label = paste("Mean Literacy Rate:", round(Mean_Literacy, 10), "%"))
+
+lit_ee_boxplot <- ggplot() +
+  geom_boxplot(data = smart_data_binned, aes(x = Expenditure_Category,y = `Literacy Rate`, fill = Expenditure_Category), alpha = 0.8, outlier.shape = 21, outlier.fill = "white", outlier.alpha = 0.7,width = 0.6) +
+  geom_point(data = mean_data, aes(x = Expenditure_Category, y = Mean_Literacy, text = Tooltip_Label), shape = 23, size = 3, fill = "white",color = "black") +
+  scale_fill_viridis_d(option = "cividis") +
+  labs(
+    title = "Literacy Rate / Education Expenditure",
+    x = NULL,
+    y = "Literacy Rate"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 13, hjust = 0.5),
+    axis.text = element_text(size = 10),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor = element_blank(),
+    legend.position = "none",
+    plot.margin = margin(t = 20, r = 20, b = 20, l = 20)
+  ) +
+  scale_y_continuous(labels = scales::percent_format(scale = 100))
+
+
+interactive_tidy_boxplot <- ggplotly(lit_ee_boxplot, tooltip = "text") %>%
+  layout(hoverlabel = list(bgcolor = "white", font = list(size = 11)),
+    margin = list(t = 50, r = 50, b = 50, l = 50)
+  ) %>%config(displayModeBar = FALSE)
+
+interactive_tidy_boxplot
+```
+**Observations**
+
+While massive expenditure does not mean countries will be the top in literacy rate, it does help, as countries with the lowest spenditure show the biggest spread of literacy rate.
+
+## Migration for Education
+
+```{r fig.width=10, fig.height=10, message=FALSE, warning=FALSE}
+smart_data_migrants <- smart_data %>%
+  mutate(Education_Bin = cut(`Education Expenditure`, breaks = 25)) %>%
+  group_by(Education_Bin) %>%
+  summarise(`Mean Net Migrants` = mean(`Net Migrants`, na.rm = TRUE),
+            `Mean Education Expenditure` = mean(`Education Expenditure`, na.rm = TRUE)) %>%
+  ungroup()
+
+migrant_line <- ggplot(smart_data_migrants, aes(x = `Mean Education Expenditure`, y = `Mean Net Migrants`)) +
+  geom_hline(yintercept = 0, color = "red", size = 0.5, linetype = "solid") +
+  geom_line(color = "black", size = 1) +  
+  geom_point(aes(text = paste("Education Expenditure:", round(`Mean Education Expenditure`, 4),
+                              "<br>Net Migrants:", round(`Mean Net Migrants`, 2))),
+             color = "purple", size = 2) +  
+  labs(title = "Net Migrants / Education Expenditure",
+       x = "Education Expenditure of GDP",
+       y = "Average Net Migrants") +
+  scale_x_continuous(labels = scales::percent_format(scale = 1)) +
+  theme_minimal(base_size = 14)
+
+ggplotly(migrant_line, tooltip = "text") 
+
+```
+
+**Observations**
+
+- A lot of people from countries wil very low expenditure on education migrate to other countries. 
+- Past 7% it starts to fluctuate, as possible people from different brackets keep wanting to go to more education invested countries.
+
+:::
+
+## N/A Countries
+
+# Countries with Missing GDP Information
+
+
+::: panel
+
+## Why do they miss information?
+
+```{r fig.width=20, fig.height=20, message=FALSE, warning=FALSE}
+na_gdp_countries <- global_information_dataset %>%
+  filter(is.na(`Country GDP`)) %>%
+  select(Country, Population)
+
+total_population <- sum(na_gdp_countries$Population, na.rm = TRUE)
+
+threshold <- 0.01 * total_population
+
+na_countries_grouped <- na_gdp_countries %>% mutate(Country = ifelse(Population < threshold, "Other", Country)) %>% group_by(Country) %>% summarise(Population = sum(Population)) %>% ungroup()
+
+plot_ly(na_countries_grouped, labels = ~Country, values = ~Population, type = 'pie', textinfo = 'label+value', hoverinfo = 'label+value') %>% layout(title = "Countries with Missing GDP By Population")
+```
+**Observations**
+
+These are the countries which lack a lot of financial data. One of them being their GDP. The reason for that cannot be decisive, but upon my research, those countries do no openly state their investments, and only rough assumptions can be made my experts. Usually it's countries with higher corruption rate, or other similar reasons, but this is not always the case, and I do not have the graph to prove so.
+
+:::
+
+## Conclusion
+
+# Conclusion
+
+
+::: panel
+
+**Why do people migrate?**
+
+As shown, there are two main reasons for migration. One is for financial security, and the other is for the sake of education. It is understandable that people thrive for financial security more as that means survival. It is also understandable that people want to migrate to countries so their kids can get better education.
+
+**Migration Issues**
+
+As of recently, there has been a lot of news regarding migration, and my charts solidified my previous observations. It is understandable that people want a better life. It can also be seen that Asia alone have very high levels of migration, which can cause issues so smaller countries, as they are not able to keep up with the demand.
+
+**Making final dataset into .csv**
+```{r fig.width=20, fig.height=20, message=FALSE, warning=FALSE}
+write.csv(global_information_dataset, "VI_FullDataset.csv", row.names = FALSE)
+```
+
+![](MigrationCover.jpg)
+
+:::
+
+:::
+:::
+
