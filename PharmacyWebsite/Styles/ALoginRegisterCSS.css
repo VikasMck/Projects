@@ -1,0 +1,154 @@
+/*Background image*/
+body{
+    background-image: url("../Images/PharmacyBG.avif");
+    background-size: cover;
+
+}
+
+/*Login CSS*/
+
+/*making the form look professional*/
+.LoginForm {
+    background: linear-gradient(to right, #E8BAB0, #EAC6CF);
+    /*make the gradient look smoother by increasing the size*/
+    background-size: 800% 800%;
+    width: 450px;
+    height: 420px;
+    margin: 70px auto 0;
+    border-radius: 25px;
+    box-shadow: 0 0 10px dimgrey;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    animation: gradient 10s ease-in-out infinite;
+
+}
+/*make the animation ease in and ease out*/
+@keyframes gradient {
+    0% { background-position: 0 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0 50%; }
+}
+
+.LoginForm form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.LoginText{
+    margin-bottom: 20px;
+    font-family: KoHo;
+}
+
+.LoginForm label {
+    font-size: 20px;
+    font-family: KoHo;
+    margin-bottom: 5px;
+}
+
+/*changing how the input looks for both the text boxes and for the password*/
+.LoginForm input[type="text"],
+.LoginForm input[type="password"] {
+    width: 70%;
+    height: 30px;
+    border-radius: 5px;
+    border: none;
+    padding: 5px;
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+/*same the above*/
+.LoginForm input[type="submit"],
+.LoginForm input[type="button"] {
+    font-family: KoHo;
+    background-color: coral;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin-top: 10px;
+    font-size: 18px;
+}
+
+/*adding a hover effect*/
+.LoginForm input[type="submit"]:hover,
+.LoginForm input[type="button"]:hover {
+    background-color: darkorange;
+}
+
+
+
+/*Register CSS*/
+
+/*Same as login, just some values different because the register box is bigger and has an extra input box*/
+
+.RegisterForm {
+    background: linear-gradient(to right, #E8BAB0, #EAC6CF);
+    /*vv make the gradient look smoother*/
+    background-size: 800% 800%;
+    width: 450px;
+    height: 550px;
+    margin: 50px auto 0;
+    border-radius: 15px;
+    box-shadow: 0 0 10px dimgrey;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    animation: gradient 10s ease-in-out infinite;
+}
+
+
+
+.RegisterForm form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.RegisterForm{
+    margin-bottom: 20px;
+    font-family: KoHo;
+}
+
+
+.RegisterForm label {
+    font-size: 20px;
+    font-family: KoHo;
+    margin-bottom: 5px;
+}
+
+.RegisterForm input[type="text"],
+.RegisterForm input[type="email"],
+.RegisterForm input[type="password"] {
+    font-family: KoHo;
+    width: 70%;
+    height: 30px;
+    border-radius: 5px;
+    border: none;
+    padding: 5px;
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+
+.RegisterForm input[type="submit"],
+.RegisterForm input[type="button"] {
+    font-family: KoHo;
+    background-color: #FF7F50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin-top: 10px;
+    font-size: 18px;
+}
+
+.RegisterForm input[type="submit"]:hover,
+.RegisterForm input[type="button"]:hover {
+    background-color: darkorange;
+}
+
+
+

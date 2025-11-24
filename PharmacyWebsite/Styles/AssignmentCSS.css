@@ -1,0 +1,356 @@
+/*this is added for scalability so the sizing would adjust depending on window size*/
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    background-color: #E7E7E7;
+}
+
+.TopBanner{
+    /*background-color: #BAE0B2;*/
+    background:linear-gradient(to right, #BAE0B2, #C8F8EC, #6CC491);
+    overflow: auto;
+}
+
+.PharmLogoImage{
+    width: 20%;
+    float: left;
+}
+.RemainingBanner{
+    width: 80%;
+    float: right;
+    font-size: 70px;
+    font-family: KoHo;
+    display: flex;
+    justify-content: center;
+}
+
+.Navigation{
+    background-color: #333;
+    overflow: auto;
+    font-size: 20px;
+    font-family: KoHo;
+}
+
+.Navigation ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.Navigation li{
+    margin-right: 20px;
+}
+
+/*excluding this from the rest so it goes on the right*/
+.Navigation li.AccountHandler{
+    margin-right: 0;
+    margin-left: auto;
+}
+
+.Navigation a{
+    display: block;
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+}
+
+.Navigation a:hover{
+    background-color: #ddd;
+    color: black;
+}
+
+/*Catalogue*/
+
+
+.CatalogueMain {
+    margin-left: 40px;
+    margin-right: 40px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 30px;
+    padding: 30px;
+}
+
+.CatalogueItem {
+    border: 3px solid black;
+    border-radius: 30px;
+    box-shadow: 0 0 10px dimgrey;
+    padding: 10px;
+    text-align: center;
+    font-family: KoHo;
+    background-color: white;
+
+}
+
+.CatalogueItem img {
+    max-width: 100%;
+    height: auto;
+}
+
+.CatalogueItem h3 {
+    margin-top: 10px;
+}
+
+.CatalogueItem p {
+    margin-top: 5px;
+}
+
+.PriceIcon {
+    font-weight: bold;
+    /*1.2em means its 1.2 times larger than the <p>*/
+    font-size: 1.2em;
+    color: green;
+}
+
+.AddToBasket {
+    font-family: KoHo;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin-top: 10px;
+    background-color: cornflowerblue;
+}
+
+/*Stuff for basket*/
+
+.TopText{
+    font-family: KoHo;
+    font-size: 50px;
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+.BasketCatalogueMain {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+    margin: 0 400px 0 100px;
+}
+
+.BasketItemName{
+    font-family: KoHo;
+    font-size: 40px;
+    text-align: center;
+    margin-left: 300px;
+    color: grey;
+}
+
+.BasketCatalogueItem {
+    background-color: white;
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr 1fr;
+    justify-content: space-between;
+    border: 2px solid grey;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 14px;
+    font-family: KoHo;
+}
+
+
+
+.BasketSummary {
+    float: right;
+    margin-right: 80px;
+    padding: 20px;
+    text-align: center;
+    font-family: KoHo;
+}
+
+.BasketSummary h3 {
+    font-size: 30px;
+    /*margin-top: -200px;*/
+}
+
+.BasketSummary p {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.basketTotal {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.purchaseButton {
+    border-radius: 20px;
+    background-color: white;
+    margin-top: 20px;
+    width: 150px;
+    height: 50px;
+    font-size: 15px;
+    font-family: KoHo;
+}
+
+.editUserPopup,
+.logoutBox,
+.confirmationBox {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    /*this helps centering the popups*/
+    transform: translate(-50%, -50%);
+    padding: 50px;
+    background-color: lightgrey;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    font-family: KoHo;
+
+}
+
+.logoutBox p,
+.confirmationBox p {
+    margin-bottom: 50px;
+    font-size: 30px;
+    color: black;
+    text-align: center;
+}
+
+.editUserPopupContent button,
+.logoutBox button,
+.confirmationBox button {
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 16px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: none;
+    border-radius: 5px;
+}
+
+.editUserPopupContent button:hover,
+.logoutBox button:hover,
+.confirmationBox button:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+
+.editUserPopupContent input[type="text"],
+.editUserPopupContent input[type="email"],
+.editUserPopupContent input[type="password"] {
+    font-family: KoHo;
+    width: 70%;
+    height: 30px;
+    border-radius: 5px;
+    border: none;
+    padding: 5px;
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+
+
+/*User table, same as basket, im tired*/
+
+.UserMain {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+    margin: 0 100px 0 100px;
+}
+
+.UserItem {
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr 1fr 1fr;
+    grid-column-gap: 10px;
+    justify-content: space-between;
+    border: 2px solid grey;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 14px;
+    font-family: KoHo;
+}
+
+
+
+
+
+
+/*Main menu items, yes I do this last*/
+
+.WelcomeSection {
+    background-color: #d2d4c8;
+    font-family: KoHo;
+    padding: 50px;
+    text-align: center;
+    border-bottom-left-radius: 140px;
+    border-bottom-right-radius: 140px;
+}
+
+
+.WelcomeMessage h3 {
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+
+.WelcomeMessage p {
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+
+.ProductsInMain {
+    font-family: KoHo;
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.ProductsInMain h3 {
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+
+.MainContents {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.Product {
+    margin: 20px;
+    text-align: center;
+}
+
+.Product img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 40px;
+    box-shadow: 0 4px 8px black;
+    /*make the size increase slower*/
+    transition: transform 0.2s ease-in-out;
+}
+
+/*this is very cool*/
+.Product img:hover {
+    transform: scale(1.1);
+}
+
+.SlideshowCaption {
+    font-size: 18px;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+
+
+
+
+
+
+
+
+
+
