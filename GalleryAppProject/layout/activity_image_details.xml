@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/image_detail_wallpaper">
+
+<!--comments are horrible in xml files-->
+<!--    basic image placeholder-->
+    <ImageView
+        android:id="@+id/image_view_id"
+        android:layout_width="match_parent"
+        android:layout_height="424dp"
+        android:layout_marginTop="11dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_back_id" />
+
+<!--text views with some effects and tidying, mostly generated-->
+    <TextView
+        android:id="@+id/txt_tag_view_id"
+        android:layout_width="235dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="88dp"
+        android:background="#80000000"
+        android:elevation="2dp"
+        android:padding="8dp"
+        android:fontFamily="monospace"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_coords_id" />
+
+    <TextView
+        android:id="@+id/txt_coords_id"
+        android:layout_width="299dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="31dp"
+        android:text=""
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/image_view_id" />
+
+
+<!--MaterialButton since I wanted to make it look nicer but in the end I think normal one would've sufficied-->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_update_id"
+        android:layout_width="150dp"
+        android:layout_height="69dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="30dp"
+        android:elevation="8dp"
+        android:fontFamily="monospace"
+        android:text="↺ Update"
+        android:textColor="#000000"
+        android:textSize="17sp"
+        app:backgroundTint="#60FFFFFF"
+        app:cornerRadius="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btn_delete_id"
+        app:layout_constraintTop_toBottomOf="@+id/txt_tag_view_id"
+        app:strokeColor="#000000"
+        app:strokeWidth="4dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_delete_id"
+        android:layout_width="150dp"
+        android:layout_height="69dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp"
+        android:elevation="8dp"
+        android:fontFamily="monospace"
+        android:text="✗ Delete"
+        android:textColor="#000000"
+        android:textSize="17sp"
+        app:backgroundTint="#60FFFFFF"
+        app:cornerRadius="20dp"
+        app:layout_constraintEnd_toStartOf="@+id/btn_update_id"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_tag_view_id"
+        app:strokeColor="#000000"
+        app:strokeWidth="4dp" />
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_back_id"
+        android:layout_width="111dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="30dp"
+        android:elevation="8dp"
+        android:fontFamily="monospace"
+        android:text="⌫ Back"
+        android:textColor="#000000"
+        android:textSize="15sp"
+        app:backgroundTint="#60FFFFFF"
+        app:cornerRadius="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeColor="#000000"
+        app:strokeWidth="4dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_copy_id"
+        android:layout_width="235dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="14dp"
+        android:elevation="8dp"
+        android:fontFamily="monospace"
+        android:text="⎘ Save to Clipboard"
+        android:textColor="#000000"
+        android:textSize="15sp"
+        app:backgroundTint="#60FFFFFF"
+        app:cornerRadius="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeColor="#000000"
+        app:strokeWidth="4dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
